@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategy Recommendation</title>
+    <style>
+        body {
+            background-image: url('/static/background.jpg'); /* Background image */
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #444; /* Dark grey text */
+        }
+
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.8); /* Slight transparency */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333; /* Deep grey heading color */
+        }
+
+        .form-group {
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #555; /* Medium grey label color */
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #6c757d; /* Bootstrap grey for buttons */
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #5a6268; /* Darker grey on hover */
+        }
+
+        .prediction-result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <h1>Strategy Recommendation</h1>
+        <h2>Based on SWOT Analysis</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="strength">Strength (1-10):</label>
+                <input type="number" id="strength" name="strength" min="1" max="10" required>
+            </div>
+            <div class="form-group">
+                <label for="weakness">Weakness (1-10):</label>
+                <input type="number" id="weakness" name="weakness" min="1" max="10" required>
+            </div>
+            <div class="form-group">
+                <label for="opportunities">Opportunities (1-10):</label>
+                <input type="number" id="opportunities" name="opportunities" min="1" max="10" required>
+            </div>
+            <div class="form-group">
+                <label for="threats">Threats (1-10):</label>
+                <input type="number" id="threats" name="threats" min="1" max="10" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Predict Strategy</button>
+            </div>
+        </form>
+
+        {% if prediction %}
+        <div class="prediction-result">
+            <h3>Recommended Strategy: {{ prediction }}</h3>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

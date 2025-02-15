@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services</title>
+
+    <!-- Embedded CSS -->
+    <style>
+        body {
+            background-image: url('/static/background.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            padding-top: 20px; /* Space above the navbar */
+        }
+
+        .navbar {
+            background-color: #333;
+            margin-top: 20px; /* Space above the navbar */
+            margin-bottom: 20px; /* Space below the navbar */
+        }
+
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto; /* Space around all sections */
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container h1 {
+            font-size: 3rem;
+            color: #555555;
+            font-weight: bold;
+        }
+
+        .content-box {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px; /* Space between the image and text */
+        }
+
+        .content-box img {
+            width: 45%;
+            max-width: 400px;
+            border-radius: 10px;
+        }
+
+        .content-box .text-content {
+            width: 45%;
+            text-align: left;
+            padding: 20px;
+        }
+
+        .content-box .text-content h2 {
+            font-size: 2rem;
+            color: #222222;
+        }
+
+        .content-box .text-content p {
+            font-size: 1rem;
+            color: #555555;
+        }
+
+        .content-box-reverse {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row-reverse; /* Reverse the direction */
+            gap: 40px; /* Space between the image and text */
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="{{ url_for('index') }}">Home</a>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('services') }}">Services</a>
+    <a href="{{ url_for('login') }}">Login</a>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+    <h1>Our Services</h1>
+
+    <!-- First Service: Peer Analysis -->
+    <div class="content-box">
+        <img src="{{ url_for('static', filename='about-peer.jpg') }}" alt="Peer Analysis" style="width: 250px; height: 300px;">
+        <div class="text-content">
+            <h2>Peer Analysis</h2>
+            <p>We provide in-depth peer analysis to help you understand your market positioning relative to competitors. By evaluating industry benchmarks and key performance indicators, we offer insights to refine your strategies and stay ahead in the market.Our analysis allows you to identify gaps in your performance and explore opportunities to outperform competitors. With actionable insights, we empower you to make informed decisions that enhance your competitive edge. Our goal is to provide a comprehensive view of the competitive landscape, allowing you to leverage your strengths for sustained success.</p>
+        </div>
+    </div>
+
+    <!-- Second Service: Strategy Recommendation -->
+    <div class="content-box-reverse">
+        <img src="{{ url_for('static', filename='about-strategy.jpg') }}" alt="Strategy Recommendation" style="width: 250px; height: 300px;">
+        <div class="text-content">
+            <h2>Strategy Recommendation</h2>
+            <p>Our expert team crafts tailored strategy recommendations based on your unique business needs. We focus on actionable solutions that drive growth, improve efficiency, and address critical challenges in achieving your objectives.We combine industry expertise and market trends to offer innovative solutions that help you stay ahead of the curve. Whether it's expanding into new markets or optimizing existing processes, our recommendations ensure you achieve maximum impact and profitability.</p>
+        </div>
+    </div>
+     
+    <div class="content-box-reverse">
+        <img src="{{ url_for('static', filename='about-perform.jpg') }}" alt="performance measurement" style="width: 250px; height: 300px;">
+        <div class="text-content">
+            <h2>Performance Measurement</h2>
+            <p> we provide comprehensive performance measurement services to help your business stay on track and achieve its strategic objectives. By leveraging key performance indicators (KPIs) and advanced analytics, we help you assess operational efficiency, financial performance, and customer satisfaction.With our performance measurement tools, you can identify strengths, uncover areas for improvement, and make data-driven decisions that drive growth and success. Let us help you optimize your business operations for sustained performance and long-term success.</p>
+        </div>
+     </div>  
+
+    <!-- Third Service: Planning and Resource Allocation -->
+    <div class="content-box">
+        <img src="{{ url_for('static', filename='about-planning.jpg') }}" alt="Planning and Resource Allocation" style="width: 250px; height: 300px;">
+        <div class="text-content">
+            <h2>Planning and Resource Allocation</h2>
+            <p>Efficient planning and resource allocation are vital for success. We assist in optimizing your resource management to ensure that your team and budget are aligned with strategic priorities, maximizing impact and minimizing waste.Our planning process involves a thorough analysis of your current resources and identifies areas where you can enhance efficiency. By prioritizing tasks and allocating resources wisely, we help you achieve more with less. With our expert guidance, your business can streamline operations and deliver results more effectively while maintaining flexibility for future growth.</p>
+        </div>
+    </div>
+
+    <!-- Fourth Service: Goals Tracker and Manager -->
+    <div class="content-box-reverse">
+        <img src="{{ url_for('static', filename='about-goalstracker.jpg') }}" alt="Goals Tracker and Manager" style="width: 250px; height: 300px;">
+        <div class="text-content">
+            <h2>Goals Tracker and Manager</h2>
+            <p>Stay on top of your progress with our Goals Tracker and Manager. This tool enables you to monitor key milestones, measure performance, and make data-driven adjustments to ensure you consistently achieve your targets.With real-time insights into progress, our tool helps you stay focused on high-priority tasks and deadlines. It offers a clear view of your objectives, breaking them down into actionable steps to ensure accountability at every stage. By regularly assessing your performance, we help you maintain momentum and stay aligned with your overall strategic goals.</p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

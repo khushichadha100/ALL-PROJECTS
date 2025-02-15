@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }}'s Dashboard</title>
+    <style>
+        body {
+            background-image: url('/static//background.jpg');
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: #555;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #555;
+            margin-bottom: 40px;
+        }
+        .message {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .dashboard-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            padding: 30px;
+        }
+        .dashboard-box {
+            width: 250px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for buttons */
+        }
+        .dashboard-box:hover {
+            transform: scale(1.05); /* Slight hover effect */
+        }
+        .peer-sentiment {
+            background-color: pink;
+        }
+        .employee-performance {
+            background-color: lightgreen;
+        }
+        .strategy-recommendation {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome {{ user.username }} !</h1>
+    <h1>Designation/Role: {{ user.designation }}</h1>
+    <div class="message">
+        <h2>This is your personalized Dashboard</h2>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- Peer Sentiment Analysis -->
+        <div class="dashboard-box peer-sentiment" onclick="window.location.href='/peer_sentiment_analysis'">
+            Peer Sentiment Analysis
+        </div>
+
+        <!-- Employee Performance Prediction -->
+        <div class="dashboard-box employee-performance" onclick="window.location.href='/employee_performance'">
+            Employee Performance Prediction
+        </div>
+
+        <!-- Strategy Recommendation System -->
+        <div class="dashboard-box strategy-recommendation" onclick="window.location.href='/strategy_recommendation'">
+            Strategy Recommendation System
+        </div>
+    </div>
+
+</body>
+</html>

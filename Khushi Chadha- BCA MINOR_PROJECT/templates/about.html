@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Corporate Solutions</title>
+    <style>
+        body {
+            background-image: url('/static//background.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+           
+        }
+         
+        .navbar {
+            background-color: #333;
+        }
+        .navbar a {
+            color: white;
+            padding: 14px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 10px;
+             
+            border-radius: 10px;
+        }
+        .content-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .content-box img {
+            width: 45%;
+            border-radius: 10px;
+        }
+        .content-box p {
+            width: 50%;
+            font-size: 1rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="{{ url_for('services') }}">Services</a>
+        <a href="{{ url_for('login') }}">Login</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>About Corporate Solutions</h1>
+        <!-- First Layout: Left Image, Right Text -->
+    <div class="content-box">
+        <img src="{{ url_for('static', filename='myphoto.jpg') }}"style="width: 250px; height: 300px;">
+        <div class="text-content">
+            <h2><i> Director and Founder </i> </h2>
+            <p> As the Director and Founder of Corporate Solutions, Khushi Chadha leads with a vision to deliver innovative and effective business solutions. With a passion for excellence and a commitment to client success, Khushi Chadha has built a reputation for driving growth and transforming businesses.</p>
+        </div>
+        </div>
+       <div class="content-box">
+             <p>Corporate Solutions is a premier business consultancy firm providing tailored solutions to help companies grow, innovate, and thrive in a competitive market. Our mission is to empower businesses with strategies and tools for success.
+Corporate solutions encompass a range of services and products designed to address the needs of businesses in achieving efficiency, growth, and sustainability.
+        </p>
+         <p>Our mission is to empower businesses with innovative solutions that drive efficiency, growth, and success. We strive to understand your unique challenges and provide tailored strategies that help you achieve your goals. Our commitment is to deliver exceptional value, foster long-term partnerships, and ensure your business stays ahead in an ever-changing world. </p>
+     </div>
+</body>
+</html>
