@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Forecasting Prediction</title>
+    <link rel="icon" href="{{ url_for('static', filename='bsolutions.png') }}" type="image/png">
+    <style>
+        body {
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+            margin: 0;
+            color: #fff;
+            overflow-y: auto;
+        }
+
+        .form-container {
+            background-color: #111;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #222;
+            color: #fff;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: grey;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .prediction-result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        @media (max-width: 1280px) {
+            .form-container {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h1>Sales Forecasting Prediction</h1>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="category">Category</label>
+        <select name="category" required>
+            <option value="Furniture" {% if category == "Furniture" %} selected {% endif %}>Furniture</option>
+            <option value="Office Supplies" {% if category == "Office Supplies" %} selected {% endif %}>Office Supplies</option>
+            <option value="Technology" {% if category == "Technology" %} selected {% endif %}>Technology</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="sub_category">Sub-Category</label>
+        <select name="sub_category" required>
+            <option value="Bookcases" {% if sub_category == "Bookcases" %} selected {% endif %}>Bookcases</option>
+            <option value="Chairs" {% if sub_category == "Chairs" %} selected {% endif %}>Chairs</option>
+            <option value="Labels" {% if sub_category == "Labels" %} selected {% endif %}>Labels</option>
+            <option value="Tables" {% if sub_category == "Tables" %} selected {% endif %}>Tables</option>
+            <option value="Storage" {% if sub_category == "Storage" %} selected {% endif %}>Storage</option>
+            <option value="Furnishings" {% if sub_category == "Furnishings" %} selected {% endif %}>Furnishings</option>
+            <option value="Art" {% if sub_category == "Art" %} selected {% endif %}>Art</option>
+            <option value="Phones" {% if sub_category == "Phones" %} selected {% endif %}>Phones</option>
+            <option value="Binders" {% if sub_category == "Binders" %} selected {% endif %}>Binders</option>
+            <option value="Appliances" {% if sub_category == "Appliances" %} selected {% endif %}>Appliances</option>
+            <option value="Paper" {% if sub_category == "Paper" %} selected {% endif %}>Paper</option>
+            <option value="Accessories" {% if sub_category == "Accessories" %} selected {% endif %}>Accessories</option>
+            <option value="Envelopes" {% if sub_category == "Envelopes" %} selected {% endif %}>Envelopes</option>
+            <option value="Fasteners" {% if sub_category == "Fasteners" %} selected {% endif %}>Fasteners</option>
+            <option value="Supplies" {% if sub_category == "Supplies" %} selected {% endif %}>Supplies</option>
+            <option value="Machines" {% if sub_category == "Machines" %} selected {% endif %}>Machines</option>
+            <option value="Copiers" {% if sub_category == "Copiers" %} selected {% endif %}>Copiers</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Predict Sales">
+    </div>
+</form>
+
+{% if prediction is not none %}
+    <div class="prediction-result">
+        <h3>Predicted Sales: {{ prediction }}</h3>
+    </div>
+{% endif %}
+
+</div>
+
+</body>
+</html>

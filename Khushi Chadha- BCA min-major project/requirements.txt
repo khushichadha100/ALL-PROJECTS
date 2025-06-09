@@ -1,0 +1,9 @@
+Flask
+Werkzeug
+Flask-PyMongo
+pandas
+numpy
+scikit-learn
+nltk
+matplotlib
+seaborn

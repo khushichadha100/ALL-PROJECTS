@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="icon" href="{{ url_for('static', filename='bsolutions.png') }}" type="image/png">
+    <style>
+        body {
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+        .login-form {
+            background-color: #111;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        .login-form h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: #fff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #222;
+            color: #fff;
+            outline: none;
+        }
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+        .form-group input[type="submit"] {
+            background-color: grey;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #fff;
+            color: #000;
+        }
+        /* Media Queries for Responsiveness */
+    @media (max-width: 1280px) {
+    /* Large screens (Tablets, smaller laptops) */
+    .hero-section h1 {
+        font-size: 2.5rem; /* Adjust font size for larger tablets and laptops */
+    }
+
+
+@media (max-width: 1024px) {
+    /* Tablet and smaller screens */
+    .hero-section h1 {
+        font-size: 2.2rem; /* Adjust for tablets */
+    }
+
+    .button-group {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 15px;
+    }
+
+    .features-section {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns layout */
+    }
+
+    .feature-card {
+        padding: 20px; /* Smaller padding for feature cards */
+    }
+
+    .feature-card h3 {
+        font-size: 1.3rem;
+    }
+
+    .feature-card p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile devices */
+    header {
+        flex-direction: column;
+        padding: 15px 20px;
+    }
+
+    nav {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .hero-section h1 {
+        font-size: 2rem; /* Further decrease heading size for mobile */
+    }
+
+    .hero-section p {
+        font-size: 1rem;
+    }
+
+    .features-section {
+        grid-template-columns: 1fr; /* Single column layout for mobile */
+        padding: 20px 10px;
+    }
+
+    .feature-card {
+        padding: 15px; /* Reduce padding */
+    }
+
+    .feature-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .feature-card p {
+        font-size: 0.85rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Very small screens (like older mobile devices) */
+    .hero-section {
+        padding: 100px 20px 60px; /* Reduce padding for very small screens */
+    }
+
+    .hero-section h1 {
+        font-size: 1.8rem; /* Further adjust heading size */
+    }
+
+    .button-group a {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+
+    .features-section {
+        grid-template-columns: 1fr;
+        padding: 20px 5px;
+    }
+
+    .feature-card {
+        padding: 10px; /* Even smaller padding */
+    }
+
+    .feature-card h3 {
+        font-size: 1.1rem; /* Adjust font size for small screens */
+    }
+
+    .feature-card p {
+        font-size: 0.8rem;
+    }
+}
+    }
+    </style>
+</head>
+<body>
+
+<div class="login-form">
+    <h2>Sign Up or Login In to Corporate Solutions</h2>
+    {% if message %}
+        <p>{{ message }}</p>  <!-- Display confirmation message -->
+    {% endif %}
+    <form method="POST">
+        <div class="form-group">
+            <input type="text" name="username" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Password" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="designation" placeholder="Designation" required>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="SUBMIT">
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ user.username }}'s Dashboard</title>
+  <link rel="icon" href="{{ url_for('static', filename='bsolutions.png') }}" type="image/png">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000;
+      color: white;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #333; /* Dark grey header */
+      color: white;
+      padding: 20px 40px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .logout {
+      background-color: #e74c3c;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .logout:hover {
+      background-color: #c0392b;
+    }
+
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .module-btn {
+      background-color: #333;  /* Black background */
+      color: white;
+      padding: 30px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      text-align: center;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+
+    .module-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .logout {
+        align-self: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome Our {{ designation }} - {{ user.username }}</h1>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+  </header>
+
+  <div class="dashboard-container">
+    <div class="modules-grid">
+      <a href="{{ url_for('employee_attrition') }}" class="module-btn">Employee Attrition Prediction</a>
+      <a href="{{ url_for('customer_segmentation') }}" class="module-btn">Customer Segmentation</a>
+      <a href="{{ url_for('sales_forecast') }}" class="module-btn">Sales Forecasting</a>
+      <a href="{{ url_for('fraud_paym') }}" class="module-btn">Fraud Detection</a>
+      <a href="{{ url_for('customer_churn') }}" class="module-btn">Customer Churn Prediction</a>
+      <a href="{{ url_for('employee_performance') }}" class="module-btn">Employee Performance Score Prediction</a>
+      <a href="{{ url_for('sentiment_analysis') }}" class="module-btn">Sentiment Analysis</a>
+      <a href="{{ url_for('marketing_campaign') }}" class="module-btn">Marketing Campaign Effectiveness Prediction</a>
+  </div>
+</body>
+</html>

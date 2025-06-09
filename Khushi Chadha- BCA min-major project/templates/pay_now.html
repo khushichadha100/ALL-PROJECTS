@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pay Now</title>
+    <link rel="icon" href="{{ url_for('static', filename='bsolutions.png') }}" type="image/png">
+    <style>
+        body {
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        .payment-form {
+            background-color: #111;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        .payment-form h2 {
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #222;
+            color: #fff;
+            outline: none;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: grey;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .form-group .pay-now {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: none;
+            width: 100%;
+        }
+
+        .form-group .pay-now:hover {
+            background-color: #45a049;
+        }
+
+        /* Confirmation Message Style */
+        .confirmation-message {
+            background-color: #333;
+            color: #4CAF50;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+                height: auto;
+                align-items: flex-start;
+            }
+
+            .payment-form {
+                width: 100%;
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .payment-form h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="payment-form">
+        <h2>PAY NOW</h2>
+        
+        {% if confirmation_message %}
+        <div class="confirmation-message">
+            <p>{{ confirmation_message }}</p>
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="amount" placeholder="Amount" required>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="pay-now" value="Pay Now">
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>

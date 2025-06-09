@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Segmentation</title>
+    <link rel="icon" href="{{ url_for('static', filename='bsolutions.png') }}" type="image/png">
+    <style>
+        body {
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+            margin: 0;
+            color: #fff;
+            overflow-y: auto;
+        }
+
+        .form-container {
+            background-color: #111;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #222;
+            color: #fff;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: grey;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .prediction-result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        @media (max-width: 1280px) {
+            .form-container {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h1>Customer Segmentation</h1>
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="family_size">Family Size (1 - 4)</label>
+                <input type="number" name="family_size" placeholder="Family Size" min="1" max="4" value="{{ family_size }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="age">Age (18 - 80)</label>
+                <input type="number" name="age" placeholder="Age" min="18" max="80" value="{{ age }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="children">Number of Children (0/1/2)</label>
+                <input type="number" name="children" placeholder="Children" min="0" max="5" value="{{ children }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="income">Income</label>
+                <input type="number" name="income" placeholder="Annual Income" min="0" value="{{ income }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="spent">Amount Spent</label>
+                <input type="number" name="spent" placeholder="Total Spent" min="0" value="{{ spent }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="is_parent">Is Parent (1 for Yes, 0 for No)</label>
+                <input type="number" name="is_parent" placeholder="1 = Yes, 0 = No" min="0" max="1" value="{{ is_parent }}" required>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Get Customer Cluster">
+            </div>
+        </form>
+
+{% if prediction is not none %}
+    <div class="prediction-result">
+        <h3>Cluster: {{ prediction }}</h3>
+        <p>
+            {% if prediction == 0 %}
+                <strong>Interpretation:</strong><br>
+                The majority of these people are parents<br>
+                At max have 3 members in the family<br>
+                They majorly have one kid and typically not teenagers<br>
+                Relatively younger<br> 
+            {% elif prediction == 1 %}
+                <strong>Interpretation:</strong><br>
+                Definitely a parent<br>
+                At max have 4 members in the family and at least 2<br>
+                Most have a teenager in the home<br>
+                Single parents are a subset of this group<br>
+                Relatively older<br>
+            {% elif prediction == 2 %}
+                <strong>Interpretation:</strong><br>
+                Definitely not a parent<br>
+                At max are only 2 members in the family.<br>
+                A slight majority of couples over single people<br>
+                Span all ages<br>
+                High income and high spending<br>
+            {% elif prediction == 3 %}
+                <strong>Interpretation:</strong><br>
+                Definitely a parent<br>
+                At max have 5 members in the family and at least 2<br>
+                Majority of them have a teenager at home<br>
+                Relatively older
+            {% endif %}
+        </p>
+    </div>
+{% endif %}
+
+
+</div>
+
+</body>
+</html>
+

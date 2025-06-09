@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing</title>
+  <link rel="icon" href="{{ url_for('static', filename='bsolutions.png') }}" type="image/png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: #fff;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+      background-color: #000;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo a {
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: #fff;
+    }
+    nav {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-grow: 1;
+    }
+    nav a {
+      text-decoration: none;
+      color: grey;
+      font-size: 1rem;
+    }
+    .get-started {
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      background-color: #fff;
+      color: #000;
+      font-size: 1rem;
+    }
+    .pricing-section {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      padding: 80px 20px;
+    }
+    .pricing-card {
+      background-color: #111;
+      padding: 40px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s;
+      color: #fff;
+    }
+    .pricing-card:hover {
+      transform: scale(1.05);
+    }
+    .pricing-card h3 {
+      font-size: 2rem;
+      color: #fff;
+    }
+    .pricing-card p {
+      color: grey;
+      font-size: 1.2rem;
+    }
+    .pricing-card .price {
+      font-size: 2.5rem;
+      color: #fff;
+      margin: 20px 0;
+    }
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .button-group a {
+      text-decoration: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .pay-now {
+      background-color: #fff;
+      color: #000;
+    }
+    .contact-us {
+      background-color: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="{{ url_for('services') }}">Our B2B Services</a>
+    </div>
+    <nav>
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('about') }}">About</a>
+      <a href="{{ url_for('pricing') }}">Pricing</a>
+      <a href="{{ url_for('careers') }}">Careers</a>
+      <a href="{{ url_for('contact_us') }}">Contact Us</a>
+    </nav>
+    <a href="{{ url_for('register') }}" class="get-started">Get Started</a>
+  </header>
+
+  <section class="pricing-section">
+    <div class="pricing-card">
+      <h3>Startup Plan</h3>
+      <p>
+        - Access to any 1 service<br>
+        - Community support<br>
+        - Limited resources access<br>
+        - Email support (response within 48 hrs)<br>
+        - Basic analytics dashboard
+      </p>
+      <div class="price">INR 500/month</div>
+      <div class="button-group">
+        <a href="{{ url_for('pay_now', plan='Startup') }}" class="pay-now">Pay Now</a>
+        <a href="{{ url_for('contact_us') }}" class="contact-us">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="pricing-card">
+      <h3>Basic Plan</h3>
+      <p>
+        - Access to any 2 services<br>
+        - Contact us via email<br>
+        - Limited access to resources<br>
+        - 24/7 email support<br>
+        - Monthly performance report
+      </p>
+      <div class="price">INR 800/month</div>
+      <div class="button-group">
+        <a href="{{ url_for('pay_now', plan='Basic') }}" class="pay-now">Pay Now</a>
+        <a href="{{ url_for('contact_us') }}" class="contact-us">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="pricing-card">
+      <h3>Pro Plan</h3>
+      <p>
+        - Access to 3 services<br>
+        - Direct phone support<br>
+        - Limited access to resources<br>
+        - Priority email support<br>
+        - API access with rate limits<br>
+        - Customizable reports
+      </p>
+      <div class="price">INR 1500/month</div>
+      <div class="button-group">
+        <a href="{{ url_for('pay_now', plan='Pro') }}" class="pay-now">Pay Now</a>
+        <a href="{{ url_for('contact_us') }}" class="contact-us">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="pricing-card">
+      <h3>Enterprise Plan</h3>
+      <p>
+        - Access to all services<br>
+        - One-to-one communication<br>
+        - Personalized portal dashboard<br>
+        - Unlimited access to resources<br>
+        - Dedicated account manager<br>
+        - Real-time analytics<br>
+        - Advanced API access<br>
+        - Custom feature development
+      </p>
+      <div class="price">INR 2000/month</div>
+      <div class="button-group">
+        <a href="{{ url_for('pay_now', plan='Enterprise') }}" class="pay-now">Pay Now</a>
+        <a href="{{ url_for('contact_us') }}" class="contact-us">Contact Us</a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

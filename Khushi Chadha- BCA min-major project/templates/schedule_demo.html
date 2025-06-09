@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Schedule Demo</title>
+    <link rel="icon" href="{{ url_for('static', filename='bsolutions.png') }}" type="image/png">
+    <style>
+        body {
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        .schedule-form {
+            background-color: #111;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        .schedule-form h2 {
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        /* Style for input and textarea */
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #222;
+            color: #fff;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: grey;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+                height: auto;
+                align-items: flex-start;
+            }
+
+            .schedule-form {
+                width: 100%;
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .schedule-form h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="schedule-form">
+        <h2>Schedule a Demo</h2>
+        {% if confirmation_message %}
+        <p>{{ confirmation_message }}</p>  <!-- Display confirmation message -->
+    {% endif %}
+        <form method="POST">
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="organization" placeholder="Organization Name" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" name="contact_number" placeholder="Your Contact Number" required pattern="[\+]?[0-9]{1,4}?[0-9]{6,14}" title="Please enter a valid contact number">
+            </div>
+            <div class="form-group">
+                <textarea name="message" placeholder="Message / Query (Optional)"></textarea>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Schedule Now">
+            </div>
+        </form>
+    </div>
+
+</body>
+
+</html>
+

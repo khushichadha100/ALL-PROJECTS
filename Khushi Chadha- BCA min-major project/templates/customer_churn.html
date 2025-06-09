@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Churn Prediction</title>
+    <link rel="icon" href="{{ url_for('static', filename='bsolutions.png') }}" type="image/png">
+    <style>
+        body {
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+            margin: 0;
+            color: #fff;
+            overflow-y: auto;
+        }
+
+        .form-container {
+            background-color: #111;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #222;
+            color: #fff;
+            outline: none;
+        }
+
+        .form-group input::placeholder {
+            color: #aaa;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: grey;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .prediction-result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        @media (max-width: 1280px) {
+            .form-container {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Churn Prediction</h1>
+
+    <form method="POST">
+        <div class="form-group">
+            <label for="dependents">Dependents (0 = No, 1 = Yes)</label>
+            <select name="dependents" required>
+                <option value="0" {% if dependents == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if dependents == '1' %}selected{% endif %}>Yes</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="tenure">Tenure (1–80)</label>
+            <input type="number" name="tenure" min="1" max="80" value="{{ tenure }}" placeholder="Enter tenure in months" required>
+        </div>
+
+        <div class="form-group">
+            <label for="online_security">Online Security (0 = No, 1 = Yes, 2 = No Internet)</label>
+            <select name="online_security" required>
+                <option value="0" {% if online_security == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if online_security == '1' %}selected{% endif %}>Yes</option>
+                <option value="2" {% if online_security == '2' %}selected{% endif %}>No Internet</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="online_backup">Online Backup (0 = No, 1 = Yes, 2 = No Internet)</label>
+            <select name="online_backup" required>
+                <option value="0" {% if online_backup == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if online_backup == '1' %}selected{% endif %}>Yes</option>
+                <option value="2" {% if online_backup == '2' %}selected{% endif %}>No Internet</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="device_protection">Device Protection (0 = No, 1 = Yes, 2 = No Internet)</label>
+            <select name="device_protection" required>
+                <option value="0" {% if device_protection == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if device_protection == '1' %}selected{% endif %}>Yes</option>
+                <option value="2" {% if device_protection == '2' %}selected{% endif %}>No Internet</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="tech_support">Tech Support (0 = No, 1 = Yes, 2 = No Internet)</label>
+            <select name="tech_support" required>
+                <option value="0" {% if tech_support == '0' %}selected{% endif %}>No</option>
+                <option value="1" {% if tech_support == '1' %}selected{% endif %}>Yes</option>
+                <option value="2" {% if tech_support == '2' %}selected{% endif %}>No Internet</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="contract">Contract Type (0 = Month-to-Month, 1 = One Year, 2 = Two Year)</label>
+            <select name="contract" required>
+                <option value="0" {% if contract == '0' %}selected{% endif %}>Month-to-Month</option>
+                <option value="1" {% if contract == '1' %}selected{% endif %}>One Year</option>
+                <option value="2" {% if contract == '2' %}selected{% endif %}>Two Year</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="total_charges">Total Charges (Any amount)</label>
+            <input type="number" step="0.01" name="total_charges" placeholder="Enter total charges" value="{{ total_charges }}" required>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Predict Churn">
+        </div>
+    </form>
+
+    {% if prediction is not none %}
+        <div class="prediction-result">
+            <h3>Churn Prediction: {{ prediction }}</h3>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
