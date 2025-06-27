@@ -10,25 +10,10 @@ from sklearn.ensemble import GradientBoostingRegressor
 app = Flask(__name__)
 
 # Load models and vectorizers
-with open('D:\\clg work\\5th sem\\MINOR PROJECT THINGS\\PROJECT\\models\\model2 peer_sentiment_analysis.pkl', 'rb') as f:
-    model2_peer_sentiment_analysis = pickle.load(f)
-
-with open('D:\\clg work\\5th sem\\MINOR PROJECT THINGS\\PROJECT\\models\\for peer_sentiment - tfidf_vectorizer.pkl', 'rb') as vectorizer_file:
-    tfidf_vectorizer = pickle.load(vectorizer_file)
-
-with open('D:\\clg work\\5th sem\\MINOR PROJECT THINGS\\PROJECT\\models\\model4_employee_analysis.pkl', 'rb') as f:
-    model4_employee_analysis = pickle.load(f)  # Load the pre-trained model
-
-model_filename = 'D:\\clg work\\5th sem\\MINOR PROJECT THINGS\\PROJECT\\models\\model3_strategy_recommendation_model.pkl'
-encoder_filename = 'D:\\clg work\\5th sem\\MINOR PROJECT THINGS\\PROJECT\\models\\for strategy - label_encoder.pkl'
-
-model_path = "D:\\clg work\\5th sem\\MINOR PROJECT THINGS\\PROJECT\\models\\model3_strategy_recommendation_model.pkl"
-with open(model_path, 'rb') as model_file:
-    model = pickle.load(model_file)
 
 
 # MongoDB Setup (connecting to local MongoDB instance)
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb://localhost')
 db = client['corporate_solutions_db']  # Database name
 peer_sentiment_collection = db['peer_sentiment_analysis']  # Collection name for Peer Sentiment
 employee_performance_collection = db['employee_performance']  # Collection name for Employee Performance
