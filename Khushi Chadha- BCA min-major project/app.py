@@ -7,77 +7,15 @@ import numpy as np
 
 
 app = Flask(__name__)
-app.secret_key = "khushi_c" 
+app.secret_key = ""
  
 #models/modules called:-
-# Load the model for performance prediction
-with open(r'C:\Users\lenovo 2020\OneDrive\Desktop\Khushi Chadha- BCA min-major project\models\emp_performance.pkl', 'rb') as f:
-    emp_performance = pickle.load(f)
-
-# Load the scaler used for standardization
-with open(r'C:\Users\lenovo 2020\OneDrive\Desktop\Khushi Chadha- BCA min-major project\models\scaler.pkl', 'rb') as f:
-    scaler1 = pickle.load(f)
-
-# Load the saved model for sentiment analysis and TF-IDF vectorizer
-model_filename = r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\sentiment_analysis_model.pkl'
-tfidf_filename = r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\tfidf_sentiment.pkl'
-
-with open(model_filename, 'rb') as f:
-    sentiment_model = pickle.load(f)
-
-with open(tfidf_filename, 'rb') as f:
-    tfidf_vectorizer = pickle.load(f)
-
-# Paths for marketing_campaign
-svm_model_filename = r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\market_campaign.pkl'
-scaler_filename = r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\campaign_scaler.pkl'
-
-# Load model & scaler
-with open(svm_model_filename, 'rb') as model_file:
-    svm_model = pickle.load(model_file)
-with open(scaler_filename, 'rb') as scaler_file:
-    sc = pickle.load(scaler_file)
-
-# Load model and scaler for customer segmentation
-model_path = r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\cust_segmen_model.pkl'
-scaler_path = r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\cust_segmen_scaler.pkl'
-
-with open(model_path, 'rb') as f:
-    model = pickle.load(f)
-
-with open(scaler_path, 'rb') as f:
-    scaler = pickle.load(f)
-
-# Load the customer churn model
-with open(r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\customer_churn_model.pkl', 'rb') as f:
-    churn_model = pickle.load(f)
-
-# Load the encoder
-with open(r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\churn_encoder.pkl', 'rb') as f:
-    churn_encoder = pickle.load(f)
-
-# Load the model for emp attrition prediction
-import pickle
-
-# Load the Employee Attrition model
-with open(r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\emp_attrition.pkl', 'rb') as f:
-    emp_attrition_model = pickle.load(f)
-
-# Load the scaler
-with open(r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\emp_att_scaler.pkl', 'rb') as f:
-    emp_attrition_scaler = pickle.load(f)
-
-# Load the trained model for fraud payment detection
-model_path = r'C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\fraud_detection_model.pkl'
-with open(model_path, 'rb') as f:
-    fraud_model = pickle.load(f)
-
-#sales forecasting
-with open('C:\\Users\\lenovo 2020\\OneDrive\\Desktop\\Khushi Chadha- BCA min-major project\\models\\sales_forecasting.pkl', 'rb') as f:
-    model_pipeline = pickle.load(f)
+"""
+###############
+"""
 
 # MongoDB Setup (connecting to local MongoDB instance)
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient('mongodb://localhost')
 db = client['corporate_solutions_db']  # Database name
 users_collection = db['users']
 scheduled_demos = db['scheduled_demos']
@@ -522,5 +460,5 @@ def register():
     return render_template("register.html")
 
 if __name__ == "__main__":
-    app.run(debug=True,host='0.0.0.0', port=5000)
+    app.run()
 
