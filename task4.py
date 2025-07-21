@@ -11,7 +11,18 @@ from langchain.memory import ConversationBufferMemory
 import os
 
 # ✅ Set OpenRouter API config using Streamlit secrets
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENROUTER_API_KEY"]
+import streamlit as st
+import os
+
+# 🔐 Load secrets safely
+api_key = st.secrets.get("OPENROUTER_API_KEY", None)
+
+if not api_key:
+    st.error("❌ OPENROUTER_API_KEY not found in secrets!")
+else:
+    os.environ["OPENAI_API_KEY"] = api_key
+    os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
+
 os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
 
 st.set_page_config(page_title="Chat with Your Documents using RAG", layout="wide")
