@@ -5,9 +5,18 @@ import tempfile
 
 from langchain.chat_models import ChatOpenAI
 
-# 🔐 Set API key and base
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENROUTER_API_KEY"]
-os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
+import streamlit as st
+import os
+
+# 🔐 Load secrets safely
+api_key = st.secrets.get("OPENROUTER_API_KEY", None)
+
+if not api_key:
+    st.error("❌ OPENROUTER_API_KEY not found in secrets!")
+else:
+    os.environ["OPENAI_API_KEY"] = api_key
+    os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
+
 
 st.set_page_config(page_title="🧠 Code Generator Agent", layout="wide")
 st.title("💻 Generate and Execute Python Code")
