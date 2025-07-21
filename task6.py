@@ -8,6 +8,10 @@ from langchain.chat_models import ChatOpenAI
 import streamlit as st
 import os
 
+# ✅ Set OpenRouter API config using Streamlit secrets
+import streamlit as st
+import os
+
 # 🔐 Load secrets safely
 api_key = st.secrets.get("OPENROUTER_API_KEY", None)
 
@@ -16,6 +20,8 @@ if not api_key:
 else:
     os.environ["OPENAI_API_KEY"] = api_key
     os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
+
+os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
 
 
 st.set_page_config(page_title="🧠 Code Generator Agent", layout="wide")
