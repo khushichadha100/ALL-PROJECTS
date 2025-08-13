@@ -51,7 +51,7 @@ if uploaded_files and st.button("Process Documents"):
 
     # ✅ Use hosted embeddings (no local PyTorch needed)
     embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small",  # or "text-embedding-3-large"
+        model="text-embedding-3-small",  # or "text-embedding-3-large" for higher quality
         openai_api_key=st.secrets["OPENROUTER_API_KEY"],
         openai_api_base="https://openrouter.ai/api/v1"
     )
