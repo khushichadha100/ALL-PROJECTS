@@ -9,25 +9,21 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
 import os
 
-# 🔐 Load OpenRouter API key from secrets
-api_key = st.secrets.get("OPENROUTER_API_KEY", None)
-if not api_key:
-    st.error("❌ OPENROUTER_API_KEY not found in secrets!")
-else:
-    os.environ["OPENAI_API_KEY"] = api_key
-    os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
+# Load API key
+api_key = st.secrets.get("OPENROUTER_API_KEY")
+os.environ["OPENAI_API_KEY"] = api_key
+os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
 
 st.set_page_config(page_title="Chat with Your Documents using RAG", layout="wide")
 st.title("📄 Chat with Your Documents using RAG")
 
-# 1. Upload files
+# Upload files
 uploaded_files = st.file_uploader(
     "Upload your PDF, DOCX, or TXT files",
     type=["pdf", "docx", "txt"],
     accept_multiple_files=True
 )
 
-# Function to read file content
 def read_file(file):
     if file.name.endswith(".pdf"):
         reader = PdfReader(file)
@@ -38,34 +34,31 @@ def read_file(file):
         return file.read().decode("utf-8")
     return ""
 
-# 2. Process uploaded documents
 if uploaded_files and st.button("Process Documents"):
     raw_text = ""
     for file in uploaded_files:
         raw_text += read_file(file)
 
-    # Split text into chunks
+    # Split text
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = text_splitter.split_text(raw_text)
 
-    # ✅ Use OpenRouter embeddings
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+    # OpenRouter Embeddings
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small", chunk_size=500)
     vector_store = FAISS.from_texts(chunks, embedding=embeddings)
 
-    # Store vector store & memory in session
     st.session_state.vector_store = vector_store
     st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     st.success("✅ Documents processed!")
 
-# 3. Chat interface
 question = st.text_input("💬 Ask a question from your documents")
 
 if question and "vector_store" in st.session_state:
     llm = ChatOpenAI(
         temperature=0,
+        model_name="mistralai/mistral-7b-instruct",
         openai_api_key=st.secrets["OPENROUTER_API_KEY"],
-        openai_api_base="https://openrouter.ai/api/v1",
-        model_name="mistralai/mistral-7b-instruct"
+        openai_api_base="https://openrouter.ai/api/v1"
     )
 
     qa_chain = ConversationalRetrievalChain.from_llm(
@@ -74,5 +67,5 @@ if question and "vector_store" in st.session_state:
         memory=st.session_state.memory
     )
 
-    result = qa_chain.run(question)
-    st.markdown("**🧠 Answer:** " + result)
+    answer = qa_chain.run(question)
+    st.markdown(f"**🧠 Answer:** {answer}")
