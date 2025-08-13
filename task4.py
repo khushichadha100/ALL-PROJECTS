@@ -2,28 +2,17 @@ import streamlit as st
 from PyPDF2 import PdfReader
 import docx2txt
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-import os
-
-# -----------------------------
-# 🔐 Set OpenRouter API key
-# -----------------------------
-api_key = st.secrets.get("OPENROUTER_API_KEY")
-if not api_key:
-    st.error("❌ OPENROUTER_API_KEY not found in secrets!")
-else:
-    os.environ["OPENAI_API_KEY"] = api_key
-    os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
 
 st.set_page_config(page_title="Chat with Your Documents", layout="wide")
-st.title("📄 Chat with Your Documents using OpenRouter")
+st.title("📄 Chat with Your Documents ")
 
 # -----------------------------
-# 1️⃣ File Upload
+# 1️⃣ Upload files
 # -----------------------------
 uploaded_files = st.file_uploader(
     "Upload PDF, DOCX, or TXT files",
@@ -42,28 +31,26 @@ def read_file(file):
     return ""
 
 # -----------------------------
-# 2️⃣ Process Documents
+# 2️⃣ Process documents
 # -----------------------------
 if uploaded_files and st.button("Process Documents"):
     raw_text = ""
     for file in uploaded_files:
         raw_text += read_file(file)
 
-    # Split text into chunks
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    chunks = text_splitter.split_text(raw_text)
+    splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    chunks = splitter.split_text(raw_text)
 
-    # OpenRouter embeddings (CPU-safe)
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-small", chunk_size=500)
+    # ✅ CPU-safe embeddings
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     vector_store = FAISS.from_texts(chunks, embedding=embeddings)
 
-    # Store in session for chat
     st.session_state.vector_store = vector_store
     st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     st.success("✅ Documents processed!")
 
 # -----------------------------
-# 3️⃣ Chat Interface
+# 3️⃣ Chat interface
 # -----------------------------
 question = st.text_input("💬 Ask a question from your documents")
 
@@ -71,8 +58,6 @@ if question and "vector_store" in st.session_state:
     llm = ChatOpenAI(
         temperature=0,
         model_name="mistralai/mistral-7b-instruct",
-        openai_api_key=st.secrets["OPENROUTER_API_KEY"],
-        openai_api_base="https://openrouter.ai/api/v1"
     )
 
     qa_chain = ConversationalRetrievalChain.from_llm(
