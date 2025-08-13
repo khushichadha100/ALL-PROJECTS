@@ -3,9 +3,8 @@ import PyPDF2
 from PyPDF2 import PdfReader
 import docx2txt
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings
- # ✅ Updated import
-from langchain_community.vectorstores import FAISS
+from langchain.embeddings import OpenAIEmbeddings  # ✅ Hosted embeddings
+from langchain.vectorstores import FAISS             # ✅ Standard FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
@@ -46,17 +45,19 @@ if uploaded_files and st.button("Process Documents"):
     for file in uploaded_files:
         raw_text += read_file(file)
 
+    # Split text into manageable chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = text_splitter.split_text(raw_text)
 
-    # ✅ Use hosted embeddings from OpenRouter (no local PyTorch)
+    # ✅ Use hosted embeddings (no local PyTorch needed)
     embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small",  # or "text-embedding-3-large" for better quality
+        model="text-embedding-3-small",  # or "text-embedding-3-large"
         openai_api_key=st.secrets["OPENROUTER_API_KEY"],
         openai_api_base="https://openrouter.ai/api/v1"
     )
 
-    vector_store = FAISS.from_texts(chunks, embedding=embeddings)
+    # ✅ Create FAISS vector store
+    vector_store = FAISS.from_texts(chunks, embeddings)
     st.session_state.vector_store = vector_store
     st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     st.success("✅ Documents processed!")
@@ -73,6 +74,7 @@ if question and "vector_store" in st.session_state:
         model_name="mistralai/mistral-7b-instruct"
     )
 
+    # Create conversational retrieval chain
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=st.session_state.vector_store.as_retriever(),
@@ -83,4 +85,3 @@ if question and "vector_store" in st.session_state:
     result = qa_chain({"question": question})
     answer = result.get("answer", str(result))
     st.markdown("**🧠 Answer:** " + answer)
-
