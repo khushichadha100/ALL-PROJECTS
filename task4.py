@@ -49,9 +49,9 @@ if uploaded_files and st.button("Process Documents"):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = text_splitter.split_text(raw_text)
 
-    # ✅ Use hosted embeddings (no local PyTorch needed)
+    # ✅ Use hosted embeddings
     embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small",  # or "text-embedding-3-large" for higher quality
+        model="text-embedding-3-small",  # or "text-embedding-3-large"
         openai_api_key=st.secrets["OPENROUTER_API_KEY"],
         openai_api_base="https://openrouter.ai/api/v1"
     )
@@ -81,7 +81,7 @@ if question and "vector_store" in st.session_state:
         memory=st.session_state.memory
     )
 
-    # ✅ Updated call for latest LangChain
+    # Get answer
     result = qa_chain({"question": question})
     answer = result.get("answer", str(result))
     st.markdown("**🧠 Answer:** " + answer)
