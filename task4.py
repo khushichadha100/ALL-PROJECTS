@@ -3,8 +3,8 @@ import PyPDF2
 from PyPDF2 import PdfReader
 import docx2txt
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import OpenAIEmbeddings  # ✅ Hosted embeddings
-from langchain.vectorstores import FAISS             # ✅ Standard FAISS
+from langchain.embeddings import OpenAIEmbeddings  # ✅ Correct embeddings
+from langchain.vectorstores import FAISS             # ✅ Correct FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
@@ -45,13 +45,13 @@ if uploaded_files and st.button("Process Documents"):
     for file in uploaded_files:
         raw_text += read_file(file)
 
-    # Split text into manageable chunks
+    # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = text_splitter.split_text(raw_text)
 
-    # ✅ Use hosted embeddings
+    # ✅ Use hosted OpenAI embeddings (works with OpenRouter API)
     embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small",  # or "text-embedding-3-large"
+        model="text-embedding-3-small",  # can also use "text-embedding-3-large"
         openai_api_key=st.secrets["OPENROUTER_API_KEY"],
         openai_api_base="https://openrouter.ai/api/v1"
     )
@@ -60,7 +60,7 @@ if uploaded_files and st.button("Process Documents"):
     vector_store = FAISS.from_texts(chunks, embeddings)
     st.session_state.vector_store = vector_store
     st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-    st.success("✅ Documents processed!")
+    st.success("✅ Documents processed successfully!")
 
 # 3️⃣ Chat interface
 question = st.text_input("💬 Ask a question from your documents")
@@ -74,7 +74,7 @@ if question and "vector_store" in st.session_state:
         model_name="mistralai/mistral-7b-instruct"
     )
 
-    # Create conversational retrieval chain
+    # Conversational retrieval chain
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=st.session_state.vector_store.as_retriever(),
