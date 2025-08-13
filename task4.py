@@ -1,83 +1,80 @@
 import streamlit as st
-import PyPDF2
-from PyPDF2 import PdfReader
-import docx2txt
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
-from langchain.chat_models import ChatOpenAI
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
-import os
+import tempfile
 
-# ✅ Set OpenRouter API config using Streamlit secrets
-import streamlit as st
-import os
+from langchain_community.document_loaders import UnstructuredFileLoader
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.chains.question_answering import load_qa_chain
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.llms import HuggingFacePipeline
 
-# 🔐 Load secrets safely
-api_key = st.secrets.get("OPENROUTER_API_KEY", None)
+from transformers import pipeline
 
-if not api_key:
-    st.error("❌ OPENROUTER_API_KEY not found in secrets!")
-else:
-    os.environ["OPENAI_API_KEY"] = api_key
-    os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
+# -----------------------------
+# 🌟 Page Config
+# -----------------------------
+st.set_page_config(page_title="🧠 Chat with Your Documents")
+st.title("📄 Offline RAG: Chat with Your Documents")
+st.markdown("Upload **PDF, DOCX, or TXT** files and ask questions — no API key needed!")
 
-
-
-st.set_page_config(page_title="Chat with Your Documents using RAG", layout="wide")
-st.title("📄 Chat with Your Documents using RAG")
-
-# 1. Upload multiple files
+# -----------------------------
+# 📂 Upload and Process Files
+# -----------------------------
 uploaded_files = st.file_uploader(
-    "Upload your PDF, DOCX, or TXT files",
-    type=["pdf", "docx", "txt"],
-    accept_multiple_files=True
+    "Upload files", type=["pdf", "docx", "txt"], accept_multiple_files=True
 )
 
-# Function to read file content
-def read_file(file):
-    if file.name.endswith(".pdf"):
-        reader = PdfReader(file)
-        return "\n".join([page.extract_text() for page in reader.pages if page.extract_text()])
-    elif file.name.endswith(".docx"):
-        return docx2txt.process(file)
-    elif file.name.endswith(".txt"):
-        return file.read().decode("utf-8")
-    return ""
+documents = []
 
-# 2. Process uploaded documents
-if uploaded_files and st.button("Process Documents"):
-    raw_text = ""
-    for file in uploaded_files:
-        raw_text += read_file(file)
+if uploaded_files:
+    with st.spinner("🔄 Reading documents..."):
+        for uploaded_file in uploaded_files:
+            with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+                tmp_file.write(uploaded_file.read())
+                tmp_path = tmp_file.name
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    chunks = text_splitter.split_text(raw_text)
+            try:
+                loader = UnstructuredFileLoader(tmp_path)
+                docs = loader.load()
+                documents.extend(docs)
+            except Exception as e:
+                st.error(f"❌ Failed to load file: {uploaded_file.name}\n\nError: {e}")
 
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    vector_store = FAISS.from_texts(chunks, embedding=embeddings)
-    st.session_state.vector_store = vector_store
-    st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-    st.success("✅ Documents processed !")
+# -----------------------------
+# 🧠 Embeddings & Vector DB
+# -----------------------------
+if documents:
+    with st.spinner("🔍 Splitting and embedding documents..."):
+        text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        split_docs = text_splitter.split_documents(documents)
 
-# 3. Chat interface
-question = st.text_input("💬 Ask a question from your documents")
+        embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        vectorstore = FAISS.from_documents(split_docs, embedding_model)
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
 
-if question and "vector_store" in st.session_state:
-    # Setup OpenRouter-compatible LLM
-    llm = ChatOpenAI(
-        temperature=0,
-        openai_api_key=st.secrets["OPENROUTER_API_KEY"],
-        openai_api_base="https://openrouter.ai/api/v1",
-        model_name="mistralai/mistral-7b-instruct"  # ✅ Use chat-compatible model
-    )
+    # -----------------------------
+    # 🤖 Load Local LLM (Flan-T5)
+    # -----------------------------
+    with st.spinner("🧠 Loading local language model..."):
+        hf_pipeline = pipeline("text2text-generation", model="google/flan-t5-small", max_new_tokens=256)
+        llm = HuggingFacePipeline(pipeline=hf_pipeline)
 
-    qa_chain = ConversationalRetrievalChain.from_llm(
-        llm=llm,
-        retriever=st.session_state.vector_store.as_retriever(),
-        memory=st.session_state.memory
-    )
+        qa_chain = load_qa_chain(llm=llm, chain_type="stuff")
 
-    result = qa_chain.run(question)
-    st.markdown("**🧠 Answer:** " + result)
+    st.success("✅ Documents indexed. Ask your questions below!")
+
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
+
+    query = st.text_input("💬 Ask a question")
+
+    if query:
+        with st.spinner("✍️ Thinking..."):
+            relevant_docs = retriever.get_relevant_documents(query)
+            result = qa_chain.run(input_documents=relevant_docs, question=query)
+            st.session_state.chat_history.append((query, result))
+
+    for q, a in st.session_state.chat_history[::-1]:
+        st.markdown(f"**You:** {q}")
+        st.markdown(f"**Answer:** {a}")
+        st.markdown("---")
