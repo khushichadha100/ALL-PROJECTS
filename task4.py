@@ -2,16 +2,25 @@ import streamlit as st
 from PyPDF2 import PdfReader
 import docx2txt
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import CohereEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
+import os
 
-st.set_page_config(page_title="Chat with Your Documents", layout="wide")
-st.title("📄 Chat with Your Documents (Streamlit Cloud Safe)")
+# 🔐 Load OpenRouter API key from secrets
+api_key = st.secrets.get("OPENROUTER_API_KEY", None)
+if not api_key:
+    st.error("❌ OPENROUTER_API_KEY not found in secrets!")
+else:
+    os.environ["OPENAI_API_KEY"] = api_key
+    os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
 
-# 1️⃣ Upload multiple files
+st.set_page_config(page_title="Chat with Your Documents using RAG", layout="wide")
+st.title("📄 Chat with Your Documents using RAG")
+
+# 1. Upload files
 uploaded_files = st.file_uploader(
     "Upload your PDF, DOCX, or TXT files",
     type=["pdf", "docx", "txt"],
@@ -29,40 +38,41 @@ def read_file(file):
         return file.read().decode("utf-8")
     return ""
 
-# 2️⃣ Process uploaded documents
+# 2. Process uploaded documents
 if uploaded_files and st.button("Process Documents"):
     raw_text = ""
     for file in uploaded_files:
         raw_text += read_file(file)
 
-    if raw_text.strip() == "":
-        st.error("❌ No readable text found in the uploaded files.")
-    else:
-        # Split text into chunks
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-        chunks = text_splitter.split_text(raw_text)
+    # Split text into chunks
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    chunks = text_splitter.split_text(raw_text)
 
-        # CPU-safe embeddings (no HuggingFace or PyTorch GPU issues)
-        embeddings = CohereEmbeddings(model="small")
-        vector_store = FAISS.from_texts(chunks, embedding=embeddings)
+    # ✅ Use OpenRouter embeddings
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+    vector_store = FAISS.from_texts(chunks, embedding=embeddings)
 
-        # Store in session
-        st.session_state.vector_store = vector_store
-        st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-        st.success("✅ Documents processed successfully!")
+    # Store vector store & memory in session
+    st.session_state.vector_store = vector_store
+    st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+    st.success("✅ Documents processed!")
 
-# 3️⃣ Chat interface
+# 3. Chat interface
 question = st.text_input("💬 Ask a question from your documents")
 
 if question and "vector_store" in st.session_state:
     llm = ChatOpenAI(
         temperature=0,
-        model_name="mistralai/mistral-7b-instruct"  # works via OpenRouter
+        openai_api_key=st.secrets["OPENROUTER_API_KEY"],
+        openai_api_base="https://openrouter.ai/api/v1",
+        model_name="mistralai/mistral-7b-instruct"
     )
+
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=st.session_state.vector_store.as_retriever(),
         memory=st.session_state.memory
     )
+
     result = qa_chain.run(question)
     st.markdown("**🧠 Answer:** " + result)
