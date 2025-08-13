@@ -2,16 +2,25 @@ import streamlit as st
 from PyPDF2 import PdfReader
 import docx2txt
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
+import os
+
+# Load OpenRouter API key from Streamlit secrets
+api_key = st.secrets.get("OPENROUTER_API_KEY", None)
+if not api_key:
+    st.error("❌ OPENROUTER_API_KEY not found in secrets!")
+else:
+    os.environ["OPENAI_API_KEY"] = api_key
+    os.environ["OPENAI_API_BASE"] = "https://openrouter.ai/api/v1"
 
 st.set_page_config(page_title="Chat with Your Documents", layout="wide")
 st.title("📄 Chat with Your Documents using RAG")
 
-# 1️⃣ Upload multiple files
+# 1️⃣ Upload files
 uploaded_files = st.file_uploader(
     "Upload your PDF, DOCX, or TXT files",
     type=["pdf", "docx", "txt"],
@@ -35,12 +44,12 @@ if uploaded_files and st.button("Process Documents"):
     for file in uploaded_files:
         raw_text += read_file(file)
 
-    # Split into chunks
+    # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     chunks = text_splitter.split_text(raw_text)
 
-    # HuggingFace embeddings (works offline, safe on Streamlit Cloud)
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    # ✅ OpenAI embeddings (CPU-friendly)
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
     vector_store = FAISS.from_texts(chunks, embedding=embeddings)
 
     # Store in session
@@ -51,12 +60,10 @@ if uploaded_files and st.button("Process Documents"):
 
 # 4️⃣ Chat interface
 question = st.text_input("💬 Ask a question from your documents")
-
 if question and "vector_store" in st.session_state:
-    # Chat model (OpenRouter compatible)
     llm = ChatOpenAI(
         temperature=0,
-        openai_api_key=st.secrets.get("OPENROUTER_API_KEY", ""),
+        openai_api_key=st.secrets["OPENROUTER_API_KEY"],
         openai_api_base="https://openrouter.ai/api/v1",
         model_name="mistralai/mistral-7b-instruct"
     )
