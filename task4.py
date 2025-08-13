@@ -3,7 +3,8 @@ import PyPDF2
 from PyPDF2 import PdfReader
 import docx2txt
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings  # ✅ Updated import
+from langchain.embeddings import OpenAIEmbeddings
+ # ✅ Updated import
 from langchain_community.vectorstores import FAISS
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
@@ -82,3 +83,4 @@ if question and "vector_store" in st.session_state:
     result = qa_chain({"question": question})
     answer = result.get("answer", str(result))
     st.markdown("**🧠 Answer:** " + answer)
+
